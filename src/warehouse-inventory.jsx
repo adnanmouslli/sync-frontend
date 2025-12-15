@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function WarehouseInventory() {
+export default function WarehouseInventory({ onLogout }) {
   const [warehouses, setWarehouses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -108,7 +108,6 @@ export default function WarehouseInventory() {
                 <thead>
                   <tr className="border-b-2 border-gray-300">
                     <th className="pb-3 pr-4 text-gray-700 font-semibold">#</th>
-                    <th className="pb-3 pr-4 text-gray-700 font-semibold">كود المادة</th>
                     <th className="pb-3 pr-4 text-gray-700 font-semibold">اسم المادة</th>
                     <th className="pb-3 pr-4 text-gray-700 font-semibold">الوحدة</th>
                     <th className="pb-3 pl-4 text-gray-700 font-semibold">الكمية</th>
@@ -123,11 +122,10 @@ export default function WarehouseInventory() {
                       }`}
                     >
                       <td className="py-3 pr-4 text-gray-600 text-sm">{index + 1}</td>
-                      <td className="py-3 pr-4 text-gray-600 text-sm font-mono">{item.code}</td>
                       <td className="py-3 pr-4 text-gray-800 font-medium">{item.name}</td>
                       <td className="py-3 pr-4 text-gray-600">{item.unity}</td>
                       <td className="py-3 pl-4 text-gray-800 font-bold">
-                        {item.quantity.toLocaleString('ar-SA')}
+                        {item.total_qty.toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -138,7 +136,7 @@ export default function WarehouseInventory() {
                       المجموع الكلي
                     </td>
                     <td className="py-3 pl-4 text-gray-800">
-                      {warehouse.total_quantity.toLocaleString('ar-SA')}
+                      {warehouse.total_quantity.toFixed(2)}
                     </td>
                   </tr>
                 </tfoot>
@@ -192,11 +190,28 @@ export default function WarehouseInventory() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            شركة السعد للصناعات الدوائية
-          </h1>
-          <p className="text-xl text-gray-600">نظام إدارة المستودعات</p>
-          
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex-1"></div>
+            <div className="flex-1">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                شركة السعد للصناعات الدوائية
+              </h1>
+              <p className="text-xl text-gray-600">نظام إدارة المستودعات</p>
+            </div>
+            <div className="flex-1 flex justify-end">
+              {onLogout && (
+                <button
+                  onClick={onLogout}
+                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  تسجيل الخروج
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Search Section */}
@@ -208,7 +223,7 @@ export default function WarehouseInventory() {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && applyFilters()}
+              onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
               placeholder="ابحث عن مادة بالاسم أو الكود..."
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
             />
