@@ -107,12 +107,6 @@ export default function Login({ onLogin }) {
           </button>
         </form>
 
-        {/* Info */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">
-            للتجربة استخدم: admin / admin
-          </p>
-        </div>
 
         {/* Footer */}
         <div className="mt-8 text-center text-xs text-gray-400">
