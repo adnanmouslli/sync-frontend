@@ -14,7 +14,11 @@ export default function Login({ onLogin }) {
     // التحقق من بيانات الاعتماد الثابتة
     if (username === 'saad' && password === 'saad123s') {
       setTimeout(() => {
-        onLogin();
+        onLogin('saad');
+      }, 500);
+    } else if (username === 'omer' && password === '123456') {
+      setTimeout(() => {
+        onLogin('omer');
       }, 500);
     } else {
       setTimeout(() => {
