@@ -13,185 +13,36 @@ export default function WarehouseInventory({ onLogout }) {
   const API_BASE_URL = 'http://158.220.104.106:3000';
   // const API_BASE_URL = 'http://localhost:3000';
 
-  // Mapping المواد إلى المستحضرات
-  const materialsToPreparations = {
-    'Acetyl Salicylic Acid Crystals': 'S-PRIN (81 - 100)\nCLOPID PULS (75 - 150)',
-    'Acyclovir': 'مقدم ترخيص',
-    'Adefovir Dipoxivel': 'HEPSOVER',
-    'Adrenaline Tartrate': 'Adrenaline Elssad - Amb',
-    'Alfuzosin Hydrochlride': 'ALFUZOSINE (2.5 - 5)',
-    'Amikacin Sulphate': 'KAMICIN - AMP',
-    'Amiloride Hydrochloride': 'FRUMILINE 5mg',
-    'Amiodaron Hydrochloride': 'AMIODARONE-ELSAAD',
-    'Amlodipine Besylate': 'MICARD ROXI EXTRA\nNORVEK',
-    'Balsalazide Disodium': 'BALCOZIDE - CAP',
-    'Beclomethasone Dipropionate': 'BECOZOL - CREAM',
-    'Miconazole Nitrare': 'BECOZOL - CREAM',
-    'Neomycine Sulfate': 'BECOZOL - CREAM',
-    'Bismuth Potassium Citrate': 'Bismol - tablet',
-    'Benzydamin Hydrochloride': 'DE-FLAM-ORL RISE',
-    'Betamethasne Dipropionate': 'DIPROMET - CREAM',
-    'Betamethasone Sodium Phosphate': 'DIPROMET - AMPOUL',
-    'Carbocysteine': 'MUCOLAR CAPSULE\nMUCOLAR SYRUP (100 - 250)',
-    'Chlophenamine Maleate': 'FLU-REST - CAPSULE',
-    'Vitamin C-- Ascorbic Acid': 'FLU-REST - CAPSULE',
-    'Paracetamol - powder': 'NEW CETAMOL - TABLETS\nFLU-REST - CAPSUL\nPARFLAM - SUSP - PARACETAMOL( L . V )',
-    'Cimetidine Base': 'CIMETINE-AMP',
-    'Ciprofloxacin Hydrochloride': 'CEPROZ - 500 & 750',
-    'Clindamycine Phosphate': 'CLINDO - (CREAM & GEL) + AMP',
-    'Clindamycin Hydrochloride': 'CLINDO - CAPSULES',
-    'Clobutinol Hydrochloride': 'SILCOF - SYRUP',
-    'Clopidogrel Bisulphate': 'CLOPID\nCLOPID PULS',
-    'Dapagliflozin Propanadiol Monohydrate': 'DAPAXIN (5 - 10)',
-    'Dexpathenol - VIT B5 GEL': 'ELSACARE - CREAM',
-    'Diclofenac Diethylamine': 'DICLOFENAC EMUL GEL',
-    'Diclofenac Sodium': 'DICLOFENAC E 50 ECT & 100 XR - AMP',
-    'Dobutamine Hydrochloride': 'DOBUTAMINE ELSAAD - AMP',
-    'Dopamine Hydrochloride': 'DOPAMINE ELSAAD (50 - 200) - AMP',
-    'Drotaverine Hydrochloride': 'DROTAVERINE ( AMP + TABLETS)',
-    'Eplerenone': 'SPRANONE (25 - 50)',
-    'Famotidine': 'FAMOX COMPLET',
-    'Flavoxate Hydrochloride': 'URITAC TAB',
-    'Fluconazole - powder': 'FLUKNAZOL ( CAPSUL (50 - 200) +DRY POWDER)',
-    'Frusemide': 'FRUMEX\nFRUMILLNE',
-    'Flunarizine HCL': 'NARIZINE 5',
-    'Glyburide': 'GLUVANS (2 - 3)',
-    'Metformine Hydrochloride': 'GLUVANS (2 - 3)\nMETFOEMINE (500-850-1000)',
-    'Glyclazide': 'GLYCON (80 - 30 XR)',
-    'Haloperidol': 'HALOPERIDOL AMP',
-    'Hydrochlorothiazide': 'MICARD ROXI PLUS (40 - 80)\nVALSAMAK PLUS (80 - 160)\nCO - RAMIPRIL ELSAAD - CAPSULE\nLOSARTAN PLUS',
-    'Hydroxyzine Hydrochloride': 'MULTRAXIN - SYRUP',
-    'Ibubrofen Micronized': 'POFFEN - 100 - SYRUP\nPARAFLAM - SUSP',
-    'Ibubrofen Powder': 'POFEN (400 - 600) TABLETS',
-    'Ivabradine Hydrochlorid': 'CONIPAN (5 - 7.5)',
-    'Iron Hyroxide Polymaltose Tablete Grade': 'MIGHTY FER -TABLETS',
-    'Iron Hyroxide Polymaltose Syrup': 'MIGHTY FER -SYRUP',
-    'Lamivudine': 'LAMIFIX ( TABLETS + SYRUP)',
-    'Lidocaine Hydrochloride': 'LIDOCAINE - (AMP + LV)\nPROCTO-SID-CREAM',
-    'Linezolid': 'LIZOLID (AMP + TABLETS)',
-    'Loratadine': 'DE-HISTAMINE (TABLETS + SYRUP)',
-    'Losartan Potassium': 'LOSARTAN (25 - 50 -  100)\nLOSARTAN PLUS',
-    'Levofloxacin': 'VENO-TAVOX (500 - 750)',
-    'Mebeverine Hydrochloride': 'DE-SPASM TABLETS',
-    'Meclizine Hydrochloride': 'MECLOVERT (50 - 12.5)\nNAVIFEMM',
-    'Menthol Crystal': 'BENGO CREAM',
-    'Methyl Salicylate': 'BENGO CREAM',
-    'Methylodopa': 'HYPOJET (125 - 250)',
-    'Metoprolo Succinate Er Micro Pellets 60%': 'MOPROL (25 - 50 - 100 -200)',
-    'Metronidazole': 'STATIZOL (LV + TABLETS (250 - 500)',
-    'Metronidazole Benzoate': 'STATIZOL SUSP',
-    'Mometasone Furoate': 'OLMISONE - CREAM',
-    'Moxifloxacin Hydrochloride': 'ELSALOX -  TABLETS',
-    'Nateglinide': 'STARNID 120',
-    'Neostigmine Methyl Sulphate Sterile': 'INTESTIGMIN 2.5',
-    'Niacinamide - VIT B5': 'CIMETINE-AMP',
-    'Noradrenaline Bitartarate': 'Noradrenaline Elssad - Amb',
-    'Norfloxacin': 'URIFLOX',
-    'Ondansetron Hydrochloride Sterile (FOR INJECTION)': 'DE-VOMIT - (SYRUP+AMP)',
-    'Ondansetron Hydrochloride Powder': 'DE-VOMIT - TABLETS',
-    'Oseltamivir Phosphate': 'TE - FLU ( CAPS - DRY POWDER',
-    'Pamaprom': 'PARABOM - TABLETS',
-    'Pantoprazole Sodium': 'PROTOM 40',
-    'Pefloxacin Mesylate Dihydrate': 'PEMEFLOX 400 - AMP',
-    'Phenytoin Sodium': 'PHENYTOIN - AMP',
-    'Piroxicam': 'ROKAM (AMP + CAPSUL (10 - 20) )',
-    'Prasugrel Hydrochloride': 'SORFENT( 5 - 10 ) TABLETS',
-    'Prednisolone Base': 'PREDLONE (5 - 20 - 50) - TABLETS',
-    'Prednisolone Sodium Phosphate': 'PREDLONE - SYRUP + AMPOUL',
-    'Pyridoxine Hydrochloride VIT B6': 'NAVIFEMM',
-    'Ramipril': 'RAMIPRIL ELSAAD - CAPSUL',
-    'Ranitidine Bismuth Substrate': 'PYLOTAC',
-    'Rivaroxaban': 'REVADAY (2.5 - 10 - 15 - 20)',
-    'Rosuvatatin Calcium': 'ROSUVASTATIN',
-    'Salbutamol Sulphate': 'PULMO-NEB (2 - 4) TABLETS',
-    'Telmisartan': 'MICARD ROXI (40 - 80)\nMICARD ROXI PLUS (40 - 80)\nMICARD ROXI EXTRA (5/40 - 5/80 - 10/40 - 10/80)',
-    'Terbinafine Hydrochloride': 'TERBINA (CREAM + TABLETS)',
-    'Tizanidine Hydrochloride': 'DE-PAIN (2 - 4)',
-    'Tolterodine Tartrate': 'DETROTAC (1 - 2)',
-    'Trazodone Hydrochloride': 'DEPRICO (50 - 150)',
-    'Tribenoside': 'PROCTO-SID',
-    'Triprolidine Hydrochloride': 'ACT-SMART (TABLETS + SYRUP)',
-    'Valsartan': 'VALSAMAK PLUS (80 - 160)\nVALSAMAK EXTRA (80 - 160)\nVALSAMAK (80 - 160)',
-    'Vardenafil Hydrochloride': 'TIGER MAN',
-    'Verapamil Hydrochloride': 'VERACARD (AMP - TABLETS',
-    'Vinopoctine': 'CAVANTINE (5 mg TABLETS)',
-    'Amoxicillin 3H2O Compacted': 'CLAVOXIL - TABLETS',
-    'Clavulanat Potassium + Avesil / M.C.C': 'CLAVOXIL - TABLETS',
-    'Amoxicillin Sodium + Potassium Clavulanat (7:1)': 'CLAVOXIL - TABLETS',
-    'Amoxicillin 3H2O Powder': 'CLAVOXIL - DRY POWDER',
-    'Amoxicillin Sodium + Potassium Clavulanat (4:1)': 'CLAVOXIL - DRY POWDER',
-    'Clavulanat Potassium With Silicon Dioxide': 'CLAVOXIL - DRY POWDER',
-    'Amoxicillin Sodium + Potassium Clavulanat Sterile 5:1': 'CLAVOXIL - VIAL',
-    'Amoxicillin Sodium Sterile': 'PANAMOXY - VIAL',
-    'Ampicillin 3H2O Compacted': 'LACTOXAM - CAPSULE',
-    'Ampicillin 3H2O Micronized': 'LACTOXAM - DRY POWDER',
-    'Ampicillin 3H2O Powder': 'LACTOXAM - DRY POWDER',
-    'Cloxacillin Sodium Powder': 'LACTOXAM - DRY POWDER',
-    'Cloxacillin Sodium Compacted': 'LACTOXAM - CAPSULE',
-    'Ampicillin Sodium Sterile': 'AMPI - VIAL',
-    'Ampicillin Sodium + Sulbactam Sudium Sterile 2:1': 'AMPICTAM - VIAL',
-    'Benzathine Benzyl Penicillin Sterile': 'LONGERPEN - VIAL',
-    'Cloxacillin Sodium Sterile': 'MAXIM - VIAL',
-    'Piperacillin Sodium + Tazobactam Sodium Sterile': 'TAZO - PLUS - VIAL',
-    'Vancomycin Hydrochloride': 'VANCOMYCIN - CAPSULE +VIAL',
-    'Cefixime Powder': 'CEFIXIME - ELSAAD -DRY POWDER',
-    'Cefixime Micronised': 'CEFIXIME - ELSAAD -DRY POWDER',
-    'Cefixime Compacted': 'CEFIXIME - ELSAAD -TABLETS',
-    'Cefepime For Injection': 'CEFIPIME',
-    'Cefadroxil Monohydrate Powder': 'CEDROX ( CAPSULE + DRY POWER)',
-    'Ceftazidime Sterile': 'CEFTADIME -VIAL',
-    'Cefuroxime Axetil Powder': 'Cefurox dry powder',
-    'Cefuroxime Axetil Compacted': 'CEFUROX - TABLETS',
-    'Cefpirome Sulphate Buffered Sterile': 'PIROM - VIAL',
-    'Cefteriaxone Sodium + Sulbactam Sodium Sterile': 'ROSACTAM - VIAL',
-    'Cefaclor Monohydrate Powder': 'OMNICLOR ( CAPSULE + DRY POWER)',
-    'Cefpodoxime Proxetil Powder': 'ORACEF - DRY POWDER',
-    'Cefpodoxime Proxetil Compacted': 'ORACEF - TABLETS',
-    'Cefteriaxone Sodium Sterile': 'ROSS - VIAL',
-    'Cefotaxime Sodium Sterile': '3 - CEF - VIAL',
-    'Caffeine': 'NEW CETAMOL',
-    'Clorazepate Dipotassium': 'TRANQUIL (5 - 10) - CAPSULES',
-    'Diazepam': 'ALSAVAL (AMP + TABLETS)',
-    'Ketamine Hydrochlorid': 'KETAMINE (AMP + LV)',
-    'Lamotrigine': 'LAMETRE',
-    'Midazolam': 'DORMITA (TABLETS + AMP)',
-    'Pregabalin': 'GABALYR (25 - 50 - 75 - 100 - 150 - 200 - 300)',
-    'Tramadol Hydrochloride': 'TRAMADOL ( AMP + TABLETS)'
-  };
-
-  const getPreparation = (materialName) => {
-    return materialsToPreparations[materialName] || '-';
-  };
-
+  // جلب البيانات من API
   useEffect(() => {
     if (activeTab !== 'all-materials') {
       fetchWarehouseData();
     }
-  }, [activeTab]);
+  }, []);
 
   const fetchWarehouseData = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      let url = `${API_BASE_URL}/api/excel/materials-by-stores`;
-
-      const response = await fetch(url);
+      const response = await fetch(`${API_BASE_URL}/api/excel/materials-by-stores`);
       
       if (!response.ok) {
         throw new Error('فشل في جلب البيانات من الخادم');
       }
 
       const data = await response.json();
-
-      if (data.success) {
+      
+      if (data.success && data.stores) {
         setWarehouses(data.stores);
       } else {
-        throw new Error(data.message || 'حدث خطأ غير متوقع');
+        setWarehouses([]);
       }
+
     } catch (err) {
-      setError(err.message);
       console.error('خطأ في جلب البيانات:', err);
+      setError(err.message || 'حدث خطأ أثناء جلب البيانات');
+      setWarehouses([]);
     } finally {
       setLoading(false);
     }
@@ -207,7 +58,10 @@ export default function WarehouseInventory({ onLogout }) {
     return materials.filter(material => {
       const nameMatch = material.name?.toLowerCase().includes(searchLower);
       const codeMatch = material.code?.toLowerCase().includes(searchLower);
-      return nameMatch || codeMatch;
+      const preparationsMatch = material.preparations?.toLowerCase().includes(searchLower);
+      const categoryMatch = material.category?.toLowerCase().includes(searchLower);
+      
+      return nameMatch || codeMatch || preparationsMatch || categoryMatch;
     });
   };
 
@@ -245,6 +99,25 @@ export default function WarehouseInventory({ onLogout }) {
     const filteredWarehouses = getFilteredWarehouses();
     const warehouse = filteredWarehouses.find(w => w.code === code);
     return warehouse || { materials_count: 0, total_quantity: 0 };
+  };
+
+  // دالة تحديد الوحدة
+  const getUnity = (warehouseCode, materialName = '') => {
+    if (warehouseCode === '12') {
+      return 'قطعة';
+    } else if (warehouseCode === '102') {
+      return 'Kg';
+    } else if (warehouseCode === '101') {
+      // شروط خاصة بمستودع المساعد
+      if (materialName.includes('Hydrochloric Acid')) {
+        return 'ml';
+      } else if (materialName.includes('Iron Oxide Red') || materialName.includes('Iron Oxide Yellow')) {
+        return 'g';
+      } else {
+        return 'Kg';
+      }
+    }
+    return '';
   };
 
   const warehouseConfig = {
@@ -292,62 +165,106 @@ export default function WarehouseInventory({ onLogout }) {
           </div>
         </div>
 
-        {/* Materials List */}
-        <div className="divide-y divide-gray-100">
+        {/* Materials Table - Mobile with Scroll */}
+        <div className="overflow-x-auto">
           {warehouse.materials && warehouse.materials.length > 0 ? (
-            warehouse.materials.map((item, index) => (
-              <div key={item.code + index} className="p-3 hover:bg-gray-50 transition-colors">
-                <div className="flex justify-between items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start gap-2">
-                      <span className="text-xs font-semibold text-gray-500 mt-0.5">
-                        {index + 1}
-                      </span>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-800 leading-tight">
-                          {searchTerm ? (
-                            <span dangerouslySetInnerHTML={{
-                              __html: item.name.replace(
-                                new RegExp(searchTerm, 'gi'),
-                                match => `<mark class="bg-yellow-200">${match}</mark>`
-                              )
-                            }} />
-                          ) : (
-                            item.name
-                          )}
-                        </p>
-                        {isActiveWarehouse && (
-                          <p className="text-xs text-gray-600 mt-1 whitespace-pre-line">
-                            {getPreparation(item.name)}
-                          </p>
+            <table className="w-full text-right min-w-[600px]">
+              <thead className="bg-gray-100">
+                <tr className="border-b-2 border-gray-300">
+                  <th className="py-2 px-2 text-gray-700 font-semibold text-xs sticky right-0 bg-gray-100">#</th>
+                  {isActiveWarehouse && (
+                    <th className="py-2 px-2 text-gray-700 font-semibold text-xs">الصنف</th>
+                  )}
+                  <th className="py-2 px-2 text-gray-700 font-semibold text-xs">اسم المادة</th>
+                  <th className="py-2 px-2 text-gray-700 font-semibold text-xs">الكمية</th>
+                  <th className="py-2 px-2 text-gray-700 font-semibold text-xs">الوحدة</th>
+                  <th className="py-2 px-2 text-gray-700 font-semibold text-xs">المستحضرات</th>
+                </tr>
+              </thead>
+              <tbody>
+                {warehouse.materials.map((item, index) => (
+                  <tr
+                    key={item.code + index}
+                    className={`border-b border-gray-200 ${
+                      index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                    }`}
+                  >
+                    <td className="py-2 px-2 text-gray-600 text-xs font-semibold sticky right-0 bg-inherit">
+                      {index + 1}
+                    </td>
+                    
+                    {/* عمود الصنف - فقط للمواد الفعالة */}
+                    {isActiveWarehouse && (
+                      <td className="py-2 px-2">
+                        {item.category && (
+                          <span className={`bg-gradient-to-r ${config.gradient} text-white px-1.5 py-0.5 rounded text-xs font-bold`}>
+                            {item.category}
+                          </span>
                         )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex-shrink-0 text-left">
-                    <div className={`bg-gradient-to-r ${config.gradient} text-white px-2 py-1 rounded-md`}>
-                      <p className="text-xs font-medium">{item.quantity.toFixed(2)}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
+                      </td>
+                    )}
+                    
+                    {/* اسم المادة */}
+                    <td className="py-2 px-2 text-gray-800 font-medium text-xs">
+                      {searchTerm ? (
+                        <span dangerouslySetInnerHTML={{
+                          __html: item.name.replace(
+                            new RegExp(searchTerm, 'gi'),
+                            match => `<mark class="bg-yellow-200">${match}</mark>`
+                          )
+                        }} />
+                      ) : (
+                        item.name
+                      )}
+                    </td>
+                    
+                    {/* الكمية */}
+                    <td className="py-2 px-2 text-gray-800 font-bold text-xs">
+                      {item.quantity.toFixed(2)}
+                    </td>
+
+                    {/* عمود الوحدة */}
+                    <td className="py-2 px-2 text-gray-700 text-xs">
+                      {getUnity(warehouse.code, item.name)}
+                    </td>
+                    
+                    {/* المستحضرات - عمود منفصل */}
+                    <td className="py-2 px-2 text-gray-700 text-xs whitespace-pre-line max-w-[200px]">
+                      {item.preparations ? (
+                        searchTerm ? (
+                          <span dangerouslySetInnerHTML={{
+                            __html: item.preparations.replace(
+                              new RegExp(searchTerm, 'gi'),
+                              match => `<mark class="bg-yellow-200">${match}</mark>`
+                            )
+                          }} />
+                        ) : (
+                          item.preparations
+                        )
+                      ) : '-'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="bg-gray-100 font-bold">
+                  <td colSpan={isActiveWarehouse ? "3" : "2"} className="py-2 px-2 text-gray-800 text-xs">
+                    المجموع الكلي
+                  </td>
+                  <td className="py-2 px-2 text-gray-800 text-xs">
+                    {warehouse.total_quantity.toFixed(2)}
+                  </td>
+                  <td className="py-2 px-2"></td>
+                  <td className="py-2 px-2"></td>
+                </tr>
+              </tfoot>
+            </table>
           ) : (
             <div className="p-8 text-center text-gray-400">
               <p className="text-sm">لا توجد مواد</p>
             </div>
           )}
         </div>
-
-        {/* Footer */}
-        {warehouse.materials && warehouse.materials.length > 0 && (
-          <div className={`bg-gradient-to-r ${config.gradient} p-3 text-white`}>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold">المجموع الكلي</span>
-              <span className="text-lg font-bold">{warehouse.total_quantity.toFixed(2)}</span>
-            </div>
-          </div>
-        )}
       </div>
     );
   };
@@ -391,11 +308,13 @@ export default function WarehouseInventory({ onLogout }) {
                 <thead>
                   <tr className="border-b-2 border-gray-300">
                     <th className="pb-3 pr-4 text-gray-700 font-semibold">#</th>
+                    {isActiveWarehouse && (
+                      <th className="pb-3 pr-4 text-gray-700 font-semibold">الصنف</th>
+                    )}
                     <th className="pb-3 pr-4 text-gray-700 font-semibold">اسم المادة</th>
                     <th className="pb-3 pl-4 text-gray-700 font-semibold">الكمية</th>
-                    {isActiveWarehouse && (
-                      <th className="pb-3 pr-4 text-gray-700 font-semibold">المستحضرات</th>
-                    )}
+                    <th className="pb-3 pl-4 text-gray-700 font-semibold">الوحدة</th>
+                    <th className="pb-3 pr-4 text-gray-700 font-semibold">المستحضرات</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -407,6 +326,19 @@ export default function WarehouseInventory({ onLogout }) {
                       }`}
                     >
                       <td className="py-3 pr-4 text-gray-600 text-sm">{index + 1}</td>
+                      
+                      {/* عمود الصنف - فقط للمواد الفعالة */}
+                      {isActiveWarehouse && (
+                        <td className="py-3 pr-4">
+                          {item.category && (
+                            <span className={`bg-gradient-to-r ${bgColor} text-white px-2 py-1 rounded text-xs font-bold`}>
+                              {item.category}
+                            </span>
+                          )}
+                        </td>
+                      )}
+                      
+                      {/* اسم المادة */}
                       <td className="py-3 pr-4 text-gray-800 font-medium">
                         {searchTerm ? (
                           <span dangerouslySetInnerHTML={{
@@ -419,28 +351,45 @@ export default function WarehouseInventory({ onLogout }) {
                           item.name
                         )}
                       </td>
+                      
+                      {/* الكمية */}
                       <td className="py-3 pl-4 text-gray-800 font-bold">
                         {item.quantity.toFixed(2)}
                       </td>
-                      {isActiveWarehouse && (
-                        <td className="py-3 pr-4 text-gray-700 whitespace-pre-line">
-                          {getPreparation(item.name)}
-                        </td>
-                      )}
+
+                      {/* عمود الوحدة */}
+                      <td className="py-3 pl-4 text-gray-700">
+                        {getUnity(warehouse.code, item.name)}
+                      </td>
+                      
+                      {/* المستحضرات - عمود منفصل */}
+                      <td className="py-3 pr-4 text-gray-700 whitespace-pre-line">
+                        {item.preparations ? (
+                          searchTerm ? (
+                            <span dangerouslySetInnerHTML={{
+                              __html: item.preparations.replace(
+                                new RegExp(searchTerm, 'gi'),
+                                match => `<mark class="bg-yellow-200">${match}</mark>`
+                              )
+                            }} />
+                          ) : (
+                            item.preparations
+                          )
+                        ) : '-'}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="bg-gray-100 font-bold">
-                    <td colSpan={isActiveWarehouse ? "2" : "2"} className="py-3 pr-4 text-gray-800">
+                    <td colSpan={isActiveWarehouse ? "3" : "2"} className="py-3 pr-4 text-gray-800">
                       المجموع الكلي
                     </td>
                     <td className="py-3 pl-4 text-gray-800">
                       {warehouse.total_quantity.toFixed(2)}
                     </td>
-                    {isActiveWarehouse && (
-                      <td className="py-3 pr-4"></td>
-                    )}
+                    <td className="py-3 pl-4"></td>
+                    <td className="py-3 pr-4"></td>
                   </tr>
                 </tfoot>
               </table>
@@ -523,7 +472,7 @@ export default function WarehouseInventory({ onLogout }) {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="ابحث عن مادة..."
+                  placeholder="ابحث عن مادة أو مستحضر..."
                   className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                 />
                 {searchTerm && (
@@ -658,17 +607,6 @@ export default function WarehouseInventory({ onLogout }) {
         <div className="mt-8 text-center text-gray-600 space-y-2 pb-4">
           <p className="text-xs sm:text-sm">
             © {new Date().getFullYear()} شركة السعد للصناعات الدوائية - جميع الحقوق محفوظة
-          </p>
-          <p className="text-xs sm:text-sm">
-            الدعم التقني: <span className="font-bold">عمر البيك</span> |{" "}
-            <a
-              href="https://wa.me/963936292813"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-600 hover:underline font-medium"
-            >
-              0936292813
-            </a>
           </p>
         </div>
       </div>
